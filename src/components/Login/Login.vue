@@ -71,8 +71,11 @@ export default {
           })
           return
         }
-        // console.log('校验成功')
+        // 校验成功发送请求去登录
         axios.put('http://localhost:8888/api/private/v1/login', this.loginFrom).then((res) => {
+          // 登录的时候会返回token指令 可以用来判断是否登录 所以要存到本地
+          localStorage.setItem('token', res.data.data.token)
+
           if (res.data.meta.status === 200) {
             this.$message({
               message: '登录成功',
