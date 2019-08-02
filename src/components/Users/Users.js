@@ -18,12 +18,21 @@ export default {
       input3: '',
       // 是否显示添加用户的对话框
       dialogAddUserVisible: false,
-      // 对话框里的用户表单的数据
+      // 添加用户对话框里的用户表单的数据
       addUserForm: {
         username: '',
         password: '',
         email: '',
         mobile: ''
+      },
+      // 是否显示编辑用户的对话框
+      dialogEditFormVisible: false,
+      // 编辑用户的表单数据
+      editUserForm: {
+        username: '',
+        email: '',
+        mobile: '',
+        id: 0
       },
       // 校验规则
       rules: {
@@ -143,6 +152,38 @@ export default {
       })
       // 刷新一下
       this.getUsersData(1)
+    },
+    // 编辑用户
+    showEditUserDialog(row) {
+      // 显示对话框
+      this.dialogEditFormVisible = true
+      // 把邮箱和手机号解构出来
+      const { email, mobile, username, id } = row
+      this.editUserForm.email = email
+      this.editUserForm.mobile = mobile
+      this.editUserForm.username = username
+      this.editUserForm.id = id
+    },
+    // 编辑用户的请求
+    async editUser() {
+      // 解构编辑对话框数据
+      const { id, email, mobile } = this.editUserForm
+      let res = await this.$axios.put(`users/${id}`, {
+        email,
+        mobile
+      })
+      if (res.data.meta.status === 200) {
+        // 关闭对话框
+        this.dialogEditFormVisible = false
+        // 提示
+        this.$message({
+          message: '更新用户成功',
+          type: 'success',
+          duration: 1000
+        })
+        // 刷新一下
+        this.getUsersData(this.pagenum, this.input3)
+      }
     }
   }
 }
