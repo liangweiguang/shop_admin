@@ -67,25 +67,23 @@ export default {
   },
   methods: {
     // 加载用户列表数据
-    getUsersData(pagenum = 1, query = '') {
-      this.$axios
-        .get('users', {
-          // 参数对象
-          params: {
-            query,
-            pagenum,
-            pagesize: 2
-          }
-        })
-        .then(res => {
-          // console.log(res)
-          // 替换表格数据
-          this.usersData = res.data.data.users
-          // 替换total
-          this.total = res.data.data.total
-          // 替换当前页
-          this.pagenum = res.data.data.pagenum
-        })
+    async getUsersData(pagenum = 1, query = '') {
+      // 参数对象
+      let config = {
+        // 参数对象
+        params: {
+          query,
+          pagenum,
+          pagesize: 2
+        }
+      }
+      let res = await this.$axios.get('users', config)
+      // 替换表格数据
+      this.usersData = res.data.data.users
+      // 替换total
+      this.total = res.data.data.total
+      // 替换当前页
+      this.pagenum = res.data.data.pagenum
     },
     // 点击切换页数
     currentPageChang(curPage) {
@@ -101,53 +99,50 @@ export default {
       this.dialogAddUserVisible = true
     },
     // 点击确定时添加用户
-    addUser() {
-      this.$axios.post('users', this.addUserForm).then(res => {
-        if (res.data.meta.status === 201) {
-          // 关闭对话框
-          this.dialogAddUserVisible = false
-          // 提示
-          this.$message({
-            message: '添加用户成功',
-            type: 'success',
-            duration: 1000
-          })
-          // 刷新一下
-          this.getUsersData(1)
-        }
-      })
+    async addUser() {
+      let res = await this.$axios.post('users', this.addUserForm)
+      if (res.data.meta.status === 201) {
+        // 关闭对话框
+        this.dialogAddUserVisible = false
+        // 提示
+        this.$message({
+          message: '添加用户成功',
+          type: 'success',
+          duration: 1000
+        })
+        // 刷新一下
+        this.getUsersData(1)
+      }
     },
     // 关闭对话框时清空表单(监听对话框关闭)
     dialogClosed() {
       this.$refs.addUserRef.resetFields()
     },
     // 改变状态的
-    stateChange(row) {
+    async stateChange(row) {
       // 把传过来的scope.row对象结构
       const { id, mg_state } = row
-      this.$axios.put(`users/${id}/state/${mg_state}`).then(res => {
-        if (res.data.meta.status === 200) {
-          // 提示
-          this.$message({
-            message: '更新状态成功',
-            type: 'success',
-            duration: 1000
-          })
-        }
-      })
-    },
-    // 删除用户
-    deleteUser(id) {
-      this.$axios.delete(`users/${id}`).then(res => {
-        // 来个提示
+      let res = await this.$axios.put(`users/${id}/state/${mg_state}`)
+      if (res.data.meta.status === 200) {
+        // 提示
         this.$message({
-          message: '删除成功',
+          message: '更新状态成功',
           type: 'success',
           duration: 1000
         })
-        // 刷新一下
-        this.getUsersData(1)
+      }
+    },
+    // 删除用户
+    async deleteUser(id) {
+      let res = await this.$axios.delete(`users/${id}`)
+      // 来个提示
+      this.$message({
+        message: '删除成功',
+        type: 'success',
+        duration: 1000
       })
+      // 刷新一下
+      this.getUsersData(1)
     }
   }
 }

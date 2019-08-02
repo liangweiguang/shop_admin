@@ -64,15 +64,18 @@
 </template>
 
 <script>
+
 export default {
   methods: {
     // 退出登录
-    logout () {
-      this.$confirm('此操作将退出账户, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
+    async logout () {
+      // console.log(res)
+      try {
+        await this.$confirm('此操作将退出账户, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
         // 0.退出成功之前需要把本地的token指令删除
         localStorage.removeItem('token')
 
@@ -85,13 +88,13 @@ export default {
 
         // 2.回到登录页
         this.$router.push('/login')
-      }).catch(() => {
+      } catch (error) {
         this.$message({
           type: 'info',
           message: '取消退出！',
           duration: 800
         })
-      })
+      }
     }
   }
 }

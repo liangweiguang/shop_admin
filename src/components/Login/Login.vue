@@ -40,7 +40,6 @@
 
 <script>
 // 引入axios的模块
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -62,7 +61,7 @@ export default {
   },
   methods: {
     startLogin () {
-      this.$refs.loginFrom.validate((valid) => {
+      this.$refs.loginFrom.validate(async (valid) => {
         if (!valid) {
           this.$message({
             message: '登录失败',
@@ -72,27 +71,26 @@ export default {
           return
         }
         // 校验成功发送请求去登录
-        axios.put('http://localhost:8888/api/private/v1/login', this.loginFrom).then((res) => {
-          // 登录的时候会返回token指令 可以用来判断是否登录 所以要存到本地
-          localStorage.setItem('token', res.data.data.token)
+        let res = await this.$axios.put('http://localhost:8888/api/private/v1/login', this.loginFrom)
+        // 登录的时候会返回token指令 可以用来判断是否登录 所以要存到本地
+        localStorage.setItem('token', res.data.data.token)
 
-          if (res.data.meta.status === 200) {
-            this.$message({
-              message: '登录成功',
-              type: 'success',
-              duration: 1000
-            })
+        if (res.data.meta.status === 200) {
+          this.$message({
+            message: '登录成功',
+            type: 'success',
+            duration: 1000
+          })
 
-            // 跳转到home页 用编程式导航
-            this.$router.push('/home')
-          } else {
-            this.$message({
-              message: '登录失败',
-              type: 'error',
-              duration: 1000
-            })
-          }
-        })
+          // 跳转到home页 用编程式导航
+          this.$router.push('/home')
+        } else {
+          this.$message({
+            message: '登录失败',
+            type: 'error',
+            duration: 1000
+          })
+        }
       })
     },
     resetLogin () {
