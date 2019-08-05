@@ -82,8 +82,10 @@ export default {
     }
   },
   created() {
-    this.getUsersData()
+    let id = this.$route.params.id
+    this.getUsersData(id)
     this.loadRoles()
+    // 获取到路由参数
   },
   methods: {
     // 加载用户列表数据
@@ -107,6 +109,8 @@ export default {
     },
     // 点击切换页数
     currentPageChang(curPage) {
+      // 编程式导航改变入口
+      this.$router.push('/users/' + curPage)
       this.getUsersData(curPage, this.input3)
     },
     // 搜索

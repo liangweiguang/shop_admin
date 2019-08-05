@@ -111,6 +111,9 @@ export default {
       if (this.$route.path === '/goods-add') {
         return '/goods'
       }
+      if (this.$route.path.startsWith('/users')) {
+        return '/users'
+      }
       return this.$route.path
     }
   }

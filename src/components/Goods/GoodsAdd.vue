@@ -5,5 +5,5 @@
 
 </script>
 
-<style>
+<style src='./GoodsAdd.less' scoped lang='less'>
 </style>
