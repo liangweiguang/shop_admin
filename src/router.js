@@ -8,6 +8,9 @@ import Home from './components/Home/Home.vue'
 import Users from './components/Users/Users.vue'
 import Roles from './components/Roles/Roles.vue'
 import Rights from './components/Rights/Rights.vue'
+import Categories from './components/Categories/Categories.vue'
+import Goods from './components/Goods/Goods.vue'
+import GoodsAdd from './components/Goods/GoodsAdd.vue'
 
 // 安装路由
 Vue.use(VueRouter)
@@ -25,7 +28,10 @@ const router = new VueRouter({
       children: [
         { path: '/users', component: Users },
         { path: '/roles', component: Roles },
-        { path: '/rights', component: Rights }
+        { path: '/rights', component: Rights },
+        { path: '/categories', component: Categories },
+        { path: '/goods', component: Goods },
+        { path: '/goods-add', component: GoodsAdd }
       ]
     }
   ]

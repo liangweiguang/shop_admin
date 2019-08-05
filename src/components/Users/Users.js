@@ -34,6 +34,16 @@ export default {
         mobile: '',
         id: 0
       },
+      // 是否显示分配角色的对话框
+      dialogAssignUserFormVisible: false,
+      // 分配角色对话框的内容
+      assignUserFormData: {
+        username: '北帅',
+        id: 0, // 用户id
+        rid: '' // 角色id
+      },
+      // 所有角色列表的数据
+      rolesData: [],
       // 校验规则
       rules: {
         // 用户名
@@ -73,6 +83,7 @@ export default {
   },
   created() {
     this.getUsersData()
+    this.loadRoles()
   },
   methods: {
     // 加载用户列表数据
@@ -178,6 +189,46 @@ export default {
         // 提示
         this.$message({
           message: '更新用户成功',
+          type: 'success',
+          duration: 1000
+        })
+        // 刷新一下
+        this.getUsersData(this.pagenum, this.input3)
+      }
+    },
+    // 点击显示分配角色对话框之前先要获取到所有的角色的数据
+    async loadRoles() {
+      let res = await this.$axios.get('roles')
+      // 把所有角色列表的数据替换掉
+      this.rolesData = res.data.data
+    },
+    // 点击显示分配角色的对话框
+    async showAssignRoles(row) {
+      this.dialogAssignUserFormVisible = true
+      // 可以获取到用户id和用户名 但是获取不到角色id
+      const { id, username } = row
+      // 把原先写死的分配角色的对话框里的数据替换
+      this.assignUserFormData.username = username
+      this.assignUserFormData.id = id
+      // 可以通过用户id发送请求去获取角色的id
+      let res = await this.$axios.get(`users/${id}`)
+      // 该用户之前可能什么角色也没有 所以需要三元区判断一下
+      this.assignUserFormData.rid =
+        res.data.data.rid === -1 ? '' : res.data.data.rid
+    },
+    // 点击确定发送请求修改角色
+    async assignRoles() {
+      // 把分配角色对话框里的数据结构
+      const { id, rid } = this.assignUserFormData
+      let res = await this.$axios.put(`users/${id}/role`, {
+        rid
+      })
+      if (res.data.meta.status === 200) {
+        // 关闭对话框
+        this.dialogAssignUserFormVisible = false
+        // 提示
+        this.$message({
+          message: '分配角色成功',
           type: 'success',
           duration: 1000
         })
