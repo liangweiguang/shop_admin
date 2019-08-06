@@ -7,7 +7,7 @@ import './assets/common.css'
 // 引入Element插件
 import ElementUI from 'element-ui'
 // 引入Element的样式
-import 'element-ui/lib/theme-chalk/index.css'
+// import 'element-ui/lib/theme-chalk/index.css'
 
 // 处理axios的三个问题
 import axios from 'axios'

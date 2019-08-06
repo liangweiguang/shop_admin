@@ -4,13 +4,14 @@ import VueRouter from 'vue-router'
 
 // 引入组件
 import Login from './components/Login/Login.vue'
-import Home from './components/Home/Home.vue'
-import Users from './components/Users/Users.vue'
-import Roles from './components/Roles/Roles.vue'
-import Rights from './components/Rights/Rights.vue'
-import Categories from './components/Categories/Categories.vue'
-import Goods from './components/Goods/Goods.vue'
-import GoodsAdd from './components/Goods/GoodsAdd.vue'
+// 设为异步组件（懒加载）
+const Home = () => import('./components/Home/Home.vue')
+const Users = () => import('./components/Users/Users.vue')
+const Roles = () => import('./components/Roles/Roles.vue')
+const Rights = () => import('./components/Rights/Rights.vue')
+const Categories = () => import('./components/Categories/Categories.vue')
+const Goods = () => import('./components/Goods/Goods.vue')
+const GoodsAdd = () => import('./components/Goods/GoodsAdd.vue')
 
 // 安装路由
 Vue.use(VueRouter)
